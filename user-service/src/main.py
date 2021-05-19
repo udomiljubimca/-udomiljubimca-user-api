@@ -7,7 +7,6 @@ logger.setLevel("DEBUG")
 
 app = FastAPI()
 
-
 @app.get("/health")
 async def index():
     return {"HEALTH" : "OK"}
