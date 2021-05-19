@@ -1,0 +1,21 @@
+version: '3'
+
+volumes:
+  postgres_data:
+      driver: local
+
+services:
+  user-service:
+    container_name: user-service
+    build:
+      context: ./user-service
+      # args: 
+      #   TEST: Test
+    image: udomiljubimca/user-service:1.0
+    ports:
+    - 8081:8080
+    networks:
+    - udomiljubimca_dev
+networks:
+  udomiljubimca_dev:
+    driver: bridge
