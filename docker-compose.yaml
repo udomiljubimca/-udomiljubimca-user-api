@@ -8,12 +8,10 @@ services:
   user-service:
     container_name: user-service
     build:
-      context: ./user-service
-      # args: 
-      #   TEST: Test
+      context: ./
     image: udomiljubimca/user-service:1.0
     ports:
-    - 8081:8080
+    - 8082:8080
     networks:
     - udomiljubimca_dev
 networks:
