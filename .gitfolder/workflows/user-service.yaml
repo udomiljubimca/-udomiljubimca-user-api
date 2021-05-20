@@ -1,4 +1,4 @@
-name: Build/Push Register API image to Docker Hub
+name: Build/Push User Service image to Docker Hub
 on:
   push:
     paths: '**'
@@ -14,5 +14,5 @@ jobs:
     - run: |
         export TAG=$(cat VERSION)
         docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_PASSWORD }}
-        docker build -t udomiljubimca/register-api:$TAG .
-        docker push udomiljubimca/register-api:$TAG
+        docker build -t udomiljubimca/user-service:$TAG .
+        docker push udomiljubimca/user-service:$TAG
