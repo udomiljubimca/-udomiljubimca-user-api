@@ -2,6 +2,7 @@ import logging
 import uvicorn
 from fastapi import FastAPI, status
 import psycopg2
+import os
 
 logger = logging.getLogger(__name__)
 logger.setLevel("DEBUG")
@@ -15,7 +16,7 @@ async def index():
 @app.get("/health-db")
 async def testdb():
     try:
-        conn = psycopg2.connect(dbname="$POSTGRES_DB", user="$POSTGRES_USER", host="$POSTGRES_URL", password="$POSTGRES_PASSWORD")
+        conn = psycopg2.connect(dbname=os.getenv("POSTGRES_DB"), user=os.getenv("$POSTGRES_USER"), host=os.getenv("$POSTGRES_URL"), password=os.getenv("$POSTGRES_PASSWORD"))
         conn.close()
         return {"HEALTH" : "OK"}
     except:
