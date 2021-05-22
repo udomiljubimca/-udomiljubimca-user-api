@@ -1,5 +1,11 @@
 FROM udomiljubimca/base-image:1.0
 
+ENV POSTGRES_URL ${POSTGRES_URL}
+ENV POSTGRES_URL ${POSTGRES_URL}
+ENV POSTGRES_DB ${POSTGRES_DB}
+ENV POSTGRES_USER ${POSTGRES_USER}
+ENV POSTGRES_PASSWORD: ${USER_SERVICE_DB_PASSWORD}
+
 ADD ./server.sh ./requirements.txt ./src /app/
 
 RUN pip install --no-cache-dir -r /app/requirements.txt && \
@@ -8,7 +14,7 @@ RUN pip install --no-cache-dir -r /app/requirements.txt && \
 
 WORKDIR /app
 
-USER appuser
+USER root
 
 EXPOSE 8080
 
