@@ -16,7 +16,7 @@ async def index():
 @app.get("/health-db")
 async def testdb():
     try:
-        conn = psycopg2.connect(dbname=os.getenv("POSTGRES_DB"), user=os.getenv("$POSTGRES_USER"), host=os.getenv("$POSTGRES_URL"), password=os.getenv("$POSTGRES_PASSWORD"))
+        conn = psycopg2.connect(dbname=os.getenv("POSTGRES_DB"), user=os.getenv("POSTGRES_USER"), host=os.getenv("POSTGRES_HOST"), password=os.getenv("POSTGRES_PASSWORD"))
         conn.close()
         return {"HEALTH" : "OK"}
     except:
