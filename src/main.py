@@ -4,15 +4,21 @@ from fastapi import FastAPI, status
 from crud import PersonalUser_db, TestDB
 from schemas import PersonalUserBase
 from pydantic import BaseModel
+import psycopg2
+import os
 logger = logging.getLogger(__name__)
 logger.setLevel("DEBUG")
 
 app = FastAPI()
-
+@app.get("/get-users")
+async def get_all_users():
+    users = PersonalUser_db.get_users()  
+    return {"message" : users}
 @app.post("/insert-user")
 async def asasign_userDB(item : PersonalUserBase):
-    status = PersonalUser_db(item.name, item.surname, item.email, item.about_me, item.city, item.age).insert_user()
+    status = PersonalUser_db(item.name, item.surname, item.email, item.about_me, item.city, item.age, item.terms_and_condition_accepted).insert_user()
     return {"message" : status["message"]}
+
 @app.get("/health")
 async def index():
     return {"HEALTH" : "OK"}
