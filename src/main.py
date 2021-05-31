@@ -4,8 +4,7 @@ from fastapi import FastAPI, status
 from crud import PersonalUser_db, TestDB
 from schemas import PersonalUserBase
 from pydantic import BaseModel
-import psycopg2
-import os
+
 logger = logging.getLogger(__name__)
 logger.setLevel("DEBUG")
 
