@@ -33,4 +33,5 @@ services:
       - udomiljubimca_dev
 networks:
   udomiljubimca_dev:
-    driver: bridge
+    external:
+      name: udomiljubimca_dev
