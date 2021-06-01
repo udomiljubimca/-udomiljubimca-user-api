@@ -22,20 +22,20 @@ class PersonalUser_db():
             cursor.execute("select * from udomi_ljubimca.personal_users;")
             row_query = cursor.fetchall()
             connection.close()
-            return {"users" : row_query}
+            return {"users" : row_query, "check" : True}
         except:
-            return {"message" : "nothing found"}
+            return {"check" : False}
     def insert_user(self):
-        connection = psycopg2.connect(dbname=os.getenv("POSTGRES_DB"), user=os.getenv("POSTGRES_USER"), host=os.getenv("POSTGRES_HOST"), password=os.getenv("POSTGRES_PASSWORD"))
-        cursor = connection.cursor()
-        query = """insert into udomi_ljubimca.personal_users ( name, surname, email, age, city, about_me, terms_and_condition_accepted)
-             values('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}')""".format(self.name , self.surname, self.email, self.about_me, self.city, self.age, self.terms_and_condition_accepted)
         try:
+            connection = psycopg2.connect(dbname=os.getenv("POSTGRES_DB"), user=os.getenv("POSTGRES_USER"), host=os.getenv("POSTGRES_HOST"), password=os.getenv("POSTGRES_PASSWORD"))
+            cursor = connection.cursor()
+            query = """insert into udomi_ljubimca.personal_users ( name, surname, email, age, city, about_me, terms_and_condition_accepted)
+             values('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}')""".format(self.name , self.surname, self.email, self.about_me, self.city, self.age, self.terms_and_condition_accepted)
             cursor.execute(query)
             connection.commit()
             cursor.close()
             connection.close() 
-            return {"message" : "the user is registered"}
+            return {"check" : True}
 
         except psycopg2.OperationalError as e:
             raise e
