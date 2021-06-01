@@ -1,6 +1,6 @@
 import logging
 import uvicorn
-from fastapi import FastAPI, status
+from fastapi import FastAPI, status, HTTPException
 from crud import PersonalUser_db, TestDB
 from schemas import PersonalUserBase
 from pydantic import BaseModel
@@ -11,12 +11,19 @@ logger.setLevel("DEBUG")
 app = FastAPI()
 @app.get("/get-users")
 async def get_all_users():
-    users = PersonalUser_db.get_users()  
-    return {"message" : users}
+    users = PersonalUser_db.get_users()
+    if users["check"] == True:
+        return {"message" : users}
+    else:
+        raise HTTPException(status_code = 404, detail = "Nothing found!")
+
 @app.post("/insert-user")
 async def asasign_userDB(item : PersonalUserBase):
     status = PersonalUser_db(item.name, item.surname, item.email, item.about_me, item.city, item.age, item.terms_and_condition_accepted).insert_user()
-    return {"message" : status["message"]}
+    if status["check"] == True:
+        return {"message" : "User is registred!"}
+    else:
+        raise HTTPException(status_code = 406, detail = "Canot find any content!")
 
 @app.get("/health")
 async def index():
