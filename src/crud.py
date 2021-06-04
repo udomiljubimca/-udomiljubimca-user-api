@@ -19,7 +19,7 @@ class PersonalUser_db():
         try:
             connection = psycopg2.connect(dbname=os.getenv("POSTGRES_DB"), user=os.getenv("POSTGRES_USER"), host=os.getenv("POSTGRES_HOST"), password=os.getenv("POSTGRES_PASSWORD"))
             cursor = connection.cursor()
-            cursor.execute("select * from udomi_ljubimca.personal_users;")
+            cursor.execute("select * from userservice.personal_users;")
             row_query = cursor.fetchall()
             connection.close()
             return {"users" : row_query, "check" : True}
