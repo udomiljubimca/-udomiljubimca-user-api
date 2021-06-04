@@ -29,7 +29,7 @@ class PersonalUser_db():
         try:
             connection = psycopg2.connect(dbname=os.getenv("POSTGRES_DB"), user=os.getenv("POSTGRES_USER"), host=os.getenv("POSTGRES_HOST"), password=os.getenv("POSTGRES_PASSWORD"))
             cursor = connection.cursor()
-            query = """insert into udomi_ljubimca.personal_users ( name, surname, email, age, city, about_me, terms_and_condition_accepted)
+            query = """insert into userservice.personal_users ( name, surname, email, age, city, about_me, terms_and_condition_accepted)
              values('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}')""".format(self.name , self.surname, self.email, self.about_me, self.city, self.age, self.terms_and_condition_accepted)
             cursor.execute(query)
             connection.commit()
@@ -39,6 +39,17 @@ class PersonalUser_db():
 
         except psycopg2.OperationalError as e:
             raise e
+    def test():
+        conn_url = 'postgresql+psycopg2://udomiljubimca:TestPassword123@user-service-postgres-dev/user-service'
+        engine = create_engine(conn_url)
+
+        db = scoped_session(sessionmaker(bind=engine))
+
+
+        query_rows = db.execute("SELECT * FROM userservice.personal_users;").fetchall()
+        for register in query_rows:
+            return{"test" : f"{register.name}"}
+
 class TestDB:
     def db_conn_check():
         try:
