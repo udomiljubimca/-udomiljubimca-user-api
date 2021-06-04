@@ -13,7 +13,7 @@ app = FastAPI()
 async def get_all_users():
     users = PersonalUser_db.get_users()
     if users["check"] == True:
-        return {"message" : users}
+        return {"message" : users['users']}
     else:
         raise HTTPException(status_code = 404, detail = "Nothing found!")
 
