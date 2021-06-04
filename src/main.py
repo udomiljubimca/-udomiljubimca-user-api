@@ -36,6 +36,9 @@ async def testdb():
         return test_conn
     else:
         return test_conn
-
+@app.get('/test')
+async def testsql():
+    s = PersonalUser_db.test()
+    return{"text" : s['test']}
 if __name__ == "__main__":
     uvicorn.run(app, port=8080, loop="asyncio")
