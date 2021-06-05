@@ -13,10 +13,10 @@ app = FastAPI()
 async def get_all_users():
     users = PersonalUser_db.get_users()
     if users["check"] == True:
-        return {"message" : users["users"]}
+        return {"message" : users['users']}
     else:
         raise HTTPException(status_code = 404, detail = "Nothing found!")
-    
+
 @app.post("/insert-user")
 async def asasign_userDB(item : PersonalUserBase):
     status = PersonalUser_db(item.name, item.surname, item.email, item.about_me, item.city, item.age, item.terms_and_condition_accepted).insert_user()
@@ -36,6 +36,11 @@ async def testdb():
         return test_conn
     else:
         return test_conn
+ 
+@app.get('/test')
+async def testsql():
+    s = PersonalUser_db.test()
+    return{"text" : s['test']}
 
 if __name__ == "__main__":
     uvicorn.run(app, port=8080, loop="asyncio")

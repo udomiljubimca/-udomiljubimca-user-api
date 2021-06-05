@@ -39,6 +39,17 @@ class PersonalUser_db():
 
         except psycopg2.OperationalError as e:
             raise e
+    def test():
+        conn_url = 'postgresql+psycopg2://udomiljubimca:TestPassword123@user-service-postgres-dev/user-service'
+        engine = create_engine(conn_url)
+
+        db = scoped_session(sessionmaker(bind=engine))
+
+
+        query_rows = db.execute("SELECT * FROM userservice.personal_users;").fetchall()
+        for register in query_rows:
+            return{"test" : f"{register.name}"}
+
 class TestDB:
     def db_conn_check():
         try:
@@ -47,4 +58,5 @@ class TestDB:
             connection.close()
             return {"HEALTH" : "OK"}
         except:
-            return {"HEALTH" : "UNHEALTHY"} 
+            return {"HEALTH" : "UNHEALTHY"}
+
