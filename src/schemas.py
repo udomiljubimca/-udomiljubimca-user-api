@@ -7,4 +7,4 @@ class PersonalUserBase(BaseModel):
     about_me: str
     city: str
     age: int
-    terms_and_condition_accepted : str
+    terms_and_condition_accepted : str 

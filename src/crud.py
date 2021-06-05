@@ -59,3 +59,4 @@ class TestDB:
             return {"HEALTH" : "OK"}
         except:
             return {"HEALTH" : "UNHEALTHY"}
+
