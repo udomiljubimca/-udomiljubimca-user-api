@@ -39,6 +39,7 @@ class PersonalUser_db():
 
         except psycopg2.OperationalError as e:
             raise e
+            
     def test():
         conn_url = 'postgresql+psycopg2://udomiljubimca:TestPassword123@user-service-postgres-dev/user-service'
         engine = create_engine(conn_url)
