@@ -45,7 +45,6 @@ class PersonalUser_db():
 
         db = scoped_session(sessionmaker(bind=engine))
 
-
         query_rows = db.execute("SELECT * FROM userservice.personal_users;").fetchall()
         for register in query_rows:
             return{"test" : f"{register.name}"}
