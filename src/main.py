@@ -1,46 +1,76 @@
-import logging
-import uvicorn
-from fastapi import FastAPI, status, HTTPException
-from crud import PersonalUser_db, TestDB
-from schemas import PersonalUserBase
-from pydantic import BaseModel
+from typing import List
 
-logger = logging.getLogger(__name__)
-logger.setLevel("DEBUG")
+import uvicorn
+from fastapi import Depends, FastAPI, HTTPException
+from sqlalchemy.orm import Session
+
+# from . import crud, models, schemas
+from crud_app import crud, models, schemas
+from crud_app.database import SessionLocal, engine
+
 
 app = FastAPI()
-@app.get("/get-users")
-async def get_all_users():
-    users = PersonalUser_db.get_users()
-    if users["check"] == True:
-        return {"message" : users['users']}
-    else:
-        raise HTTPException(status_code = 404, detail = "Nothing found!")
 
-@app.post("/insert-user")
-async def asasign_userDB(item : PersonalUserBase):
-    status = PersonalUser_db(item.name, item.surname, item.email, item.about_me, item.city, item.age, item.terms_and_condition_accepted).insert_user()
-    if status["check"] == True:
-        return {"message" : "User is registred!"}
-    else:
-        raise HTTPException(status_code = 406, detail = "Canot find any content!")
 
-@app.get("/health")
-async def index():
-    return {"HEALTH" : "OK"}
+# Dependency
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
-@app.get("/health-db")
-async def testdb():
-    test_conn = TestDB.db_conn_check()
-    if test_conn["HEALTH"] == "OK":
-        return test_conn
-    else:
-        return test_conn
- 
-@app.get('/test')
-async def testsql():
-    s = PersonalUser_db.test()
-    return{"text" : s['test']}
 
-if __name__ == "__main__":
-    uvicorn.run(app, port=8080, loop="asyncio")
+@app.get("/personal_users/{keycloak_id}/", response_model=schemas.PersonalUser)
+def read_user(keycloak_id: str, db: Session = Depends(get_db)):
+    db_user = crud.get_personal_user(db=db, keycloak_id=keycloak_id)
+    print('-----------------------------------------------------------')
+    print(keycloak_id)
+    print(db_user)
+    print('-----------------------------------------------------------------------')
+    if db_user is None:
+        raise HTTPException(status_code=404, detail='User not found')
+    return db_user
+
+
+@app.get("/personal_animal_association/{keycloak_id}/", response_model=schemas.AnimalAssociation)
+def read_user(keycloak_id: str, db: Session = Depends(get_db)):
+    db_user = crud.get_animal_association(db=db, keycloak_id=keycloak_id)
+    print('-----------------------------------------------------------')
+    print(keycloak_id)
+    print(db_user)
+    print('-----------------------------------------------------------------------')
+    if db_user is None:
+        raise HTTPException(status_code=404, detail='User not found')
+    return db_user
+
+
+@app.post("/personal_users/", response_model=schemas.PersonalUser)
+def create_user(user: schemas.PersonalUserCreate, db: Session = Depends(get_db)):
+    db_user = crud.get_personal_user(db=db, keycloak_id=user.keycloak_id)
+    print('-------------')
+    print(db_user)
+    print(user.keycloak_id)
+    print(type(db_user))
+    print('-------------')
+    if db_user:
+        raise HTTPException(status_code=404, detail='User has been already registered!')
+    return crud.create_personal_user(db=db, user=user)
+
+
+@app.post("/animal_association/", response_model=schemas.AnimalAssociation)
+def create_user(user: schemas.AnimalAssociationCreate, db: Session = Depends(get_db)):
+    db_user = crud.get_animal_association(db=db, keycloak_id=user.keycloak_id)
+    print('-------------')
+    print(db_user)
+    print(user.keycloak_id)
+    print(type(db_user))
+    print('-------------')
+    if db_user:
+        raise HTTPException(status_code=404, detail='User has been already registered!')
+    return crud.create_animal_association(db=db, user=user)
+
+
+if __name__ == '__main__':
+    uvicorn.run(app=app)
+
