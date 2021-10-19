@@ -20,7 +20,7 @@ services:
     - udomiljubimca_dev
   postgres:
     container_name: user-service-postgres-dev
-    image: postgres:9.4
+    image: postgres:11.12
     volumes:
       - postgres_user_service_data_dev:/var/lib/postgresql/data
     environment:
