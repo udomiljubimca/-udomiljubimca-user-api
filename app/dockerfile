@@ -1,4 +1,4 @@
-FROM postgres:9.4
+FROM udomiljubimca/base-image:1.0
 
 ADD ./server.sh ./requirements.txt ./src /app/
 
