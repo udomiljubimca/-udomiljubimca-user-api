@@ -1,21 +1,16 @@
-FROM udomiljubimca/base-image:1.0
 
-ENV POSTGRES_URL ${POSTGRES_URL}
-ENV POSTGRES_URL ${POSTGRES_URL}
-ENV POSTGRES_DB ${POSTGRES_DB}
-ENV POSTGRES_USER ${POSTGRES_USER}
-ENV POSTGRES_PASSWORD: ${USER_SERVICE_DB_PASSWORD}
+FROM python:3.7
 
-ADD ./server.sh ./requirements.txt ./src /app/
+# This command create folder
+# And makes it as workdir
+WORKDIR /fastapi-app
 
-RUN pip install --no-cache-dir -r /app/requirements.txt && \
-    chown -R appuser:root /app && \
-    chmod -R g=u /app
+COPY requirements.txt .
 
-WORKDIR /app
+RUN pip install -r requirements.txt
 
-USER root
+COPY ./app ./app
 
-EXPOSE 8080
+CMD ["python", "./app/main.py"]
 
-CMD ["/bin/bash", "server.sh"]
+
